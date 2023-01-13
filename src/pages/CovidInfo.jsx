@@ -12,6 +12,7 @@ import { FaViruses } from "react-icons/fa";
 import { FaTemperatureHigh} from "react-icons/fa"
 import axios from "axios";
 import {toast }from "react-toastify"
+import Spinner from "../components/Spinner";
 import {
   BarChart,
   Bar,
@@ -26,6 +27,7 @@ import {
 
 
 export default function CovidInfo() {
+  const [loading, setLoading] = useState(false)
   const [country, setCountry] = useState();
   const [info, setInfo] = useState();
   const [chartData, setChartData] = useState([])
@@ -47,13 +49,16 @@ export default function CovidInfo() {
   };
   function fetchCovidInfo(e) {
     e.preventDefault();
+    setLoading(true);
     axios
       .request(apiOptions)
       .then(function (response) {
         // console.log(response);
+        
         setInfo(response.data.response);
         const data = response.data.response[0]
         setChartData(response.data.response[0])
+        setLoading(false)
         console.log(response.data.response[0]);
         toast.success("Loaded")
         return data
@@ -99,7 +104,9 @@ export default function CovidInfo() {
       
     ];
    
-
+    if(loading){
+      return <Spinner/>;
+  }
   
   return (
     <div className="bg-custom h-screen">
