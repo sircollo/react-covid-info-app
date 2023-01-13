@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/react-covid-info-app/static/css/main.0efb6a59.css",
+    "main.js": "/react-covid-info-app/static/js/main.f7aa6f90.js",
+    "static/js/787.c47ee1f6.chunk.js": "/react-covid-info-app/static/js/787.c47ee1f6.chunk.js",
+    "static/media/virus.png": "/react-covid-info-app/static/media/virus.519c3069b56af0d42869.png",
+    "static/media/spinner.svg": "/react-covid-info-app/static/media/spinner.22eabfc82e8a17a68f7162c64174b565.svg",
+    "index.html": "/react-covid-info-app/index.html",
+    "main.0efb6a59.css.map": "/react-covid-info-app/static/css/main.0efb6a59.css.map",
+    "main.f7aa6f90.js.map": "/react-covid-info-app/static/js/main.f7aa6f90.js.map",
+    "787.c47ee1f6.chunk.js.map": "/react-covid-info-app/static/js/787.c47ee1f6.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.0efb6a59.css",
+    "static/js/main.f7aa6f90.js"
+  ]
+}
