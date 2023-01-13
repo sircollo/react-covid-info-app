@@ -11,6 +11,7 @@ import { FcDataRecovery } from "react-icons/fc";
 import { FaViruses } from "react-icons/fa";
 import { FaTemperatureHigh} from "react-icons/fa"
 import axios from "axios";
+import {toast }from "react-toastify"
 import {
   BarChart,
   Bar,
@@ -22,6 +23,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+
 
 export default function CovidInfo() {
   const [country, setCountry] = useState();
@@ -53,11 +55,12 @@ export default function CovidInfo() {
         const data = response.data.response[0]
         setChartData(response.data.response[0])
         console.log(response.data.response[0]);
+        toast.success("Loaded")
         return data
         
       })
       .catch(function (error) {
-        console.error(error);
+        toast.error("Something went wrong")
       });
   }
   async function getInitialCountry(e){
