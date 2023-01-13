@@ -2,6 +2,13 @@ import React, { useEffect, useState } from "react";
 import Logo from "../assets/virus.png";
 import { FaSearchLocation } from "react-icons/fa";
 import { countries } from "country-data";
+import { GiDeathSkull } from "react-icons/gi"
+import { CiTempHigh } from "react-icons/ci"
+import { BiNotepad } from "react-icons/bi"
+import { GiRadioactive } from "react-icons/gi"
+import { GrStatusCriticalSmall } from "react-icons/gr"
+import { FcDataRecovery } from "react-icons/fc"
+import { FaViruses } from "react-icons/fa"
 import axios from "axios";
 export default function CovidInfo() {
   const [country, setCountry] = useState(null);
@@ -98,32 +105,36 @@ export default function CovidInfo() {
                 </thead>
                 <tbody>
                   <tr>
-                    <td>New Cases</td>
+                    <td className="flex items-center space-x-3 py-2"><BiNotepad className="text-2xl mr-2 text-red-400" />New Cases</td>
                     <td>{info[0].cases.new}</td>
                   </tr>
                   <tr>
-                    <td>Active Cases</td>
+                    <td className="flex items-center space-x-3 py-2"><GiRadioactive className="text-2xl mr-2 text-red-400" />Active Cases</td>
                     <td>{info[0].cases.active}</td>
                   </tr>
                   <tr>
-                    <td>Critical</td>
+                    <td className="flex items-center space-x-3 py-2"><GrStatusCriticalSmall className="text-2xl mr-2 text-red-400" />Critical</td>
                     <td>{info[0].cases.critical}</td>
                   </tr>
                   <tr>
-                    <td>Deaths (new)</td>
+                    <td className="flex items-center space-x-3 py-2"><FcDataRecovery className="text-2xl mr-2 text-red-400" />Recovered</td>
+                    <td>{info[0].cases.recovered}</td>
+                  </tr>
+                  <tr>
+                    <td className="flex items-center space-x-3 py-2"><GiDeathSkull className="text-2xl mr-2 text-red-400" />Deaths (new)</td>
                     <td>{info[0].deaths.new}</td>
                   </tr>
                   <tr>
-                    <td>Total Cases</td>
+                    <td  className="flex items-center space-x-3 py-2"><FaViruses className="text-2xl mr-2 text-red-400" />Total Cases</td>
                     <td>{info[0].cases.total}</td>
                   </tr>
-                  <tr>
-                    <td>Total deaths</td>
-                    <td>{info[0].cases.total}</td>
+                  <tr >
+                    <td className="flex items-center space-x-3 py-2"><GiDeathSkull className="text-2xl mr-2 text-red-400" />Total deaths</td>
+                    <td>{info[0].deaths.total}</td>
                   </tr>
                   <tr>
-                    <td>Total tests</td>
-                    <td>{info[0].cases.total}</td>
+                    <td className="flex items-center space-x-3 py-2"><CiTempHigh className="text-2xl mr-2 text-red-400"/>Total tests</td>
+                    <td>{info[0].tests.total}</td>
                   </tr>
                 </tbody>
               </table>
@@ -134,6 +145,11 @@ export default function CovidInfo() {
           </div>
         </div>
       )}
+      {info &&(
+        <div className="max-w-6xl mx-auto mt-12 flex flex-col">
+        <p className="italic text-white text-sm">Date: {info[0].time}</p>
+      </div>
+      )}     
     </div>
   );
 }
