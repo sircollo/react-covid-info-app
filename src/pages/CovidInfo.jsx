@@ -1,4 +1,4 @@
-import React, { useEffect, useState, PureComponent } from "react";
+import React, { useEffect, useState, PureComponent, useRef } from "react";
 import Logo from "../assets/virus.png";
 import { FaSearchLocation } from "react-icons/fa";
 import { countries } from "country-data";
@@ -11,7 +11,7 @@ import { FcDataRecovery } from "react-icons/fc";
 import { FaViruses } from "react-icons/fa";
 import { FaTemperatureHigh} from "react-icons/fa"
 import axios from "axios";
-import {toast }from "react-toastify"
+import { toast } from "react-toastify";
 import Spinner from "../components/Spinner";
 import {
   BarChart,
@@ -24,14 +24,16 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { useNavigate } from "react-router-dom";
 
 
 export default function CovidInfo() {
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [country, setCountry] = useState();
   const [info, setInfo] = useState();
   const [chartData, setChartData] = useState([])
   const {cases, deaths, population, tests} = chartData;
+  const countri = useRef(null);
   
   const options = {
     method: "GET",
@@ -47,8 +49,28 @@ export default function CovidInfo() {
       "X-RapidAPI-Host": "covid-193.p.rapidapi.com",
     },
   };
-  function fetchCovidInfo(e) {
-    e.preventDefault();
+  useEffect(()=>{
+    async function getCurrentCountry(){
+      if(navigator.geolocation){
+        axios.request(options).then(function (response) {
+          const country_code = response.data.country
+          const countryFound = countries[`${country_code}`].name
+          // console.log(countryFound)
+          setLoading(false)          
+          countri.current = countryFound
+          return countri.current
+          
+         
+          // console.log(country)
+        }).catch(function(error){
+          // console.log(error)
+        })
+      }            
+    }
+    getCurrentCountry()   
+    
+  },[])
+  async function fetchCovidInfo() {
     setLoading(true);
     axios
       .request(apiOptions)
@@ -59,8 +81,8 @@ export default function CovidInfo() {
         const data = response.data.response[0]
         setChartData(response.data.response[0])
         setLoading(false)
-        console.log(response.data.response[0]);
-        toast.success("Loaded")
+        // console.log(response.data.response[0]);
+        // toast.success("Loaded",1)
         return data
         
       })
@@ -68,26 +90,18 @@ export default function CovidInfo() {
         toast.error("Something went wrong")
       });
   }
-  async function getInitialCountry(e){
-    e.preventDefault(e)
-    if(navigator.geolocation){
-      axios.request(options).then(async function(response){   
-        const country_code = response.data.country
-        // setCountry(countries[`${country_code}`].name)
-      }).catch(function (error) {
-        console.error(error);
-      })
+  useEffect(()=>{
+    async function getCurrentCountryData(){
+      setCountry(countri.current)
+      const currentData = await fetchCovidInfo()
+
     }
-   
-  }
+    getCurrentCountryData()
+  },[countri.current])
+
   
-  useEffect(() => {
-    (async () => {
-      let res = await getInitialCountry();
-      if (res) {
-      }
-    })();
-  });
+ 
+
   const data = [
       {
         // name: "Cases",
@@ -103,6 +117,9 @@ export default function CovidInfo() {
   
       
     ];
+    if(chartData.error){
+      toast.error('not found')
+    }
    
     if(loading){
       return <Spinner/>;
@@ -110,12 +127,12 @@ export default function CovidInfo() {
   
   return (
     <div className="bg-custom h-screen">
-      <header className="sticky top-0 z-50 flex flex-wrap justify-between items-center py-2 px-3 max-w-6xl mx-auto">
+      <header className="w-full sticky top-0 z-50 flex flex-wrap justify-between items-center py-2 px-3 max-w-6xl mx-auto">
         <div className="cursor-pointer flex items-center">
           <img src={Logo} alt="" className="object-contain w-12" />
           <p className="px-2 text-white font-medium">Covid information</p>
         </div>
-        <div className="w-3/5">
+        <div className="w-3/5 mt-6">
           <form className="flex items-center">
             <div className="relative w-full">
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"></div>
@@ -223,6 +240,9 @@ export default function CovidInfo() {
           </div>
           <div className="">
             <p className="text-3xl text-white">Graph Information</p>
+            {!data && (
+              <Spinner/>
+            )}
             {chartData && (
               <BarChart
               // width=
